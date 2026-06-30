@@ -36,6 +36,10 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->longText('payload');
             $table->integer('last_activity')->index();
+
+            // add user relation
+            $table->uuid('userId')->nullable();
+            $table->foreign('userId')->references('id')->on('users')->onDelete('restrict');
         });
     }
 

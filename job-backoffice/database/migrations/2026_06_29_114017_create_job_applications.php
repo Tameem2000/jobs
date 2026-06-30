@@ -14,11 +14,8 @@ return new class extends Migration
         Schema::create('job_applications', function (Blueprint $table) {
         $table->uuid('id')->primary();
             $table->enum('status',['Pending','Accepted','Rejected'])->default('Pending');
-            $table->string('description');
-            $table->string('location');
-            $table->string('salary')->nullable();
-            $table->enum('type',['Full-Time','Contract','Remote','Hybrid'])->defaut('Full-Time');
-
+            $table->float('aiGeneratedScore',2)->default(0);
+            $table->longText('aiGeneratedFeedback')->nullable();
             $table->timestamps();
             $table->softDeletes();
             //relations
