@@ -17,14 +17,28 @@ use Illuminate\Notifications\Notifiable;
 
 class Company extends Model
 {
-  use HasFactory, Notifiable, HasUuids, SoftDeletes;
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
 
-protected $table = "companies";
+    protected $table = "companies";
 
-protected $keyType = "string";
+    protected $keyType = "string";
 
     public $incrementing = false;
+
+    public static $industries = [
+        'Technology',
+        'Healthcare',
+        'Finance',
+        'Education',
+        'Retail',
+        'Manufacturing',
+        'Hospitality',
+        'Transportation',
+        'Energy',
+        'Telecommunications',
+        'Other',
+    ];
 
     protected $dates = [
          'deleted_at',
@@ -41,6 +55,9 @@ protected $keyType = "string";
         return $this->belongsTo(User::class,'ownerId','id');
     }
     public function JobVacancy(){
-        return $this->hasMany(JobVacancy::class,'comanyId','id');
+        return $this->hasMany(JobVacancy::class,'companyId','id');
+    }
+    public function jobApplication(){
+        return $this->hasManyThrough(JobApplication::class, JobVacancy::class, 'companyId', 'jobVacancyId', 'id', 'id');
     }
 }

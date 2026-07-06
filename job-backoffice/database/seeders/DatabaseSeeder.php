@@ -18,12 +18,17 @@ class DatabaseSeeder extends Seeder
     {
         // Seed The root admin
 
-        User::firstOrCreate([
+        User::create([
             'name' => 'Tameem',
             'email' => 'admin@admin.com',
             'password'=> Hash::make('12345678'),
             'role'=> 'admin',
             'email_verified_at'=> now(),
         ]);
+                $this->call(class: JobCategorySeeder::class);
+                $this->call(class: CompanySeeder::class);
+                $this->call(class: JobVacancySeeder::class);
+                $this->call(class: JobApplicationSeeder::class);
+
     }
 }

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(columns: ['status','aiGeneratedScore','aiGeneratedFeedback','userId','resumeId','job_vacancyId'])]
+#[Fillable(columns: ['status','aiGeneratedScore','aiGeneratedFeedback','userId','resumeId','jobVacancyId'])]
 
 class JobApplication extends Model
 {
@@ -36,7 +36,7 @@ class JobApplication extends Model
         ];
     }
     public function jobVacancy(){
-        return $this->belongsTo(JobVacancy::class,'job_vacancyId','id');
+        return $this->belongsTo(JobVacancy::class,'jobVacancyId','id');
     }
     public function resume(){
         return $this->belongsTo(Resume::class,'resumeId','id');

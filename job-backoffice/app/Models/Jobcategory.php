@@ -13,12 +13,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 
-#[Fillable(columns: ['name'])]
-
 class Jobcategory extends Model
 {
   use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
+  protected $fillable = [
+    'name',
+  ];
   protected $table = 'job_categories';
 
   protected $keyType = "string";
