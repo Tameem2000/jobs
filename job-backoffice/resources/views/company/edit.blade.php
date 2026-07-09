@@ -1,3 +1,11 @@
+@php
+if (auth()->user()->role === 'admin') {
+    $formAction = route('company.update', ['company' => $company->id, 'redirectToList' => request()->query('redirectToList')]);
+} else if (auth()->user()->role === 'company-owner') {
+    $formAction = route('my-company.update');
+}
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -21,7 +29,7 @@
     <div class="overflow-x-auto p-6">
         <div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
             <form
-                action="{{ route('company.update', ['company' => $company->id, 'redirectToList' => request()->query('redirectToList')]) }}"
+                action="{{ $formAction }}"
                 method="POST">
                 @csrf
                 @method('PUT')

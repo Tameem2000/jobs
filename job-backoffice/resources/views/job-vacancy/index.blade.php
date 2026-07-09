@@ -33,7 +33,9 @@
             <thead>
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-black">Title</th>
+                    @if (auth()->user()->role !== 'company-owner')
                     <th class="px-6 py-3 text-left text-sm font-semibold text-black">Company</th>
+                    @endif
                     <th class="px-6 py-3 text-left text-sm font-semibold text-black">Location</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-black">Type</th>
                     <th class="px-6 py-3 text-left text-sm font-semibold text-black">Salary</th>
@@ -52,7 +54,9 @@
                                     class="px-2 text-blue-800 hover:text-blue-900">{{ $jobVacancy->title }}</a>
                             @endif
                         </td>
+                        @if (auth()->user()->role !== 'company-owner')
                         <td class="px-6 py-4 text-black">{{ $jobVacancy->company->name }}</td>
+                        @endif
                         <td class="px-6 py-4 text-black">{{ $jobVacancy->location }}</td>
                         <td class="px-6 py-4 text-black">{{ $jobVacancy->type }}</td>
                         <td class="px-6 py-4 text-black">${{ number_format($jobVacancy->salary, 2) }}</td>
