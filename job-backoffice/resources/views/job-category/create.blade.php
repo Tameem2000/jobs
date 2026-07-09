@@ -30,10 +30,10 @@
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                <button class="inline-flex items-center px-4 pt-2 pb-2 text-grey rounded-md hover:bg-gray-100">
-                    <a href="{{ route('job-category.index') }}">Cancel</a>
+                <a class="inline-flex items-center px-4 pt-2 pb-2 text-grey rounded-md hover:bg-gray-100"
+                    href="{{ url()->previous() }}">Cancel</a>
 
-                </button>
+
 
                 <button type="submit"
                     class="inline-flex items-center px-4 pt-2 pb-2 bg-blue-500 text-white rounded-md hover:bg-blue-800">

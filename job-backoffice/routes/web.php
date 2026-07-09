@@ -9,21 +9,23 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-
-
-
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin,company-owner'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-
     Route::resource('job-application', JobApplicationController::class);
+    Route::put('job-application/{id}/restore', [JobApplicationController::class, 'restore'])->name('job-application.restore');
+
     Route::resource('job-category', JobCategoryController::class);
     Route::put('job-category/{id}/restore', [JobCategoryController::class, 'restore'])->name('job-category.restore');
+
     Route::resource('job-vacancy', JobVacancyController::class);
-    Route::resource('user',UserController::class);
+    Route::put('job-vacancy/{id}/restore', [JobVacancyController::class, 'restore'])->name('job-vacancy.restore');
+
+    Route::resource('user', UserController::class);
+    Route::put('user/{id}/restore', [UserController::class, 'restore'])->name('user.restore');
+
     Route::resource('company', CompanyController::class);
     Route::put('company/{id}/restore', [CompanyController::class, 'restore'])->name('company.restore');
-
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

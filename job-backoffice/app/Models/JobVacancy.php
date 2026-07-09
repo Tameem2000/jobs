@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(columns: ['title','description','location','salary','type','caregoryId','companyId'])]
+#[Fillable(columns: ['title','description','location','salary','type','categoryId','companyId'])]
 
 class JobVacancy extends Model
 {
@@ -23,6 +23,8 @@ class JobVacancy extends Model
   protected $keyType = "string";
 
     public $incrementing = false;
+
+    protected $fillable = ["title","description","location","salary","type","categoryId","companyId", "viewCount"];
 
     protected $dates = [
          'deleted_at',

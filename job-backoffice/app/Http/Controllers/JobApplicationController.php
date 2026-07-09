@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JobApplication;
 use Illuminate\Http\Request;
 
 class JobApplicationController extends Controller
@@ -9,33 +10,30 @@ class JobApplicationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view("job-application.index");
+        $query = JobApplication::latest();
+
+        if ($request->input('archive') == true) {
+            $query->onlyTrashed();
+        }
+
+        $jobApplications = $query->paginate(10)->onEachSide(1);
+
+        return view('job-application.index', compact('jobApplications'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        $jobApplication = JobApplication::findOrFail($id);
+
+        return view('job-application.show', compact('jobApplication'));
     }
 
     /**
@@ -43,7 +41,9 @@ class JobApplicationController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $jobApplication = JobApplication::findOrFail($id);
+
+        return view('job-application.edit', compact('jobApplication'));
     }
 
     /**
@@ -51,7 +51,9 @@ class JobApplicationController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $jobApplication = JobApplication::findOrFail($id);
+        $jobApplication->update($request->all());
+        return redirect()->route('job-application.index')->with('success', 'Job application status updated successfully.');
     }
 
     /**
@@ -59,6 +61,17 @@ class JobApplicationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $jobApplication = JobApplication::findOrFail($id);
+        $jobApplication->delete();
+
+        return redirect()->route('job-application.index')->with('success', 'Job application deleted successfully.');
     }
+    public function restore(string $id)
+    {
+        $jobApplication = JobApplication::withTrashed()->findOrFail($id);
+        $jobApplication->restore();
+
+        return redirect()->route('job-application.index', ['archive' => 'true'])->with('success', 'Job application restored successfully');
+    }
+
 }

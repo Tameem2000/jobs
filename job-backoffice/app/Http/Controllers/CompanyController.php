@@ -18,12 +18,13 @@ class CompanyController extends Controller
     {
         $query = Company::latest();
 
-        if ($request->input("archive") == true) {
+        if ($request->input('archive') == true) {
             $query->onlyTrashed();
         }
 
         $companies = $query->paginate(10)->onEachSide(1);
-        return view("company.index", compact("companies"));
+
+        return view('company.index', compact('companies'));
     }
 
     /**
@@ -32,7 +33,8 @@ class CompanyController extends Controller
     public function create()
     {
         $industries = Company::$industries;
-        return view('company.create', compact('industries') );
+
+        return view('company.create', compact('industries'));
     }
 
     /**
@@ -41,20 +43,20 @@ class CompanyController extends Controller
     public function store(CompanyCreateRequest $request)
     {
         $validate = $request->validated();
-        //create owner
+        // create owner
         $owner = User::create([
             'name' => $validate['owner_name'],
             'email' => $validate['owner_email'],
             'password' => Hash::make($validate['owner_password']),
-            'role'=> 'company-owner',
+            'role' => 'company-owner',
         ]);
 
-        //return error if owner creation failed
-        if (!$owner) {
-            return redirect()->route('company.create')->with('error','Failed to create owner. Please try again.');
+        // return error if owner creation failed
+        if (! $owner) {
+            return redirect()->route('company.create')->with('error', 'Failed to create owner. Please try again.');
         }
 
-        //create company
+        // create company
         Company::create([
             'name' => $validate['name'],
             'address' => $validate['address'],
@@ -62,7 +64,8 @@ class CompanyController extends Controller
             'website' => $validate['website'] ?? null,
             'ownerId' => $owner->id,
         ]);
-        return redirect()->route('company.index')->with('success','Company Created Successfully');
+
+        return redirect()->route('company.index')->with('success', 'Company Created Successfully');
     }
 
     /**
@@ -71,6 +74,7 @@ class CompanyController extends Controller
     public function show(string $id)
     {
         $company = Company::find($id);
+
         return view('company.show', compact('company'));
     }
 
@@ -81,6 +85,7 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
         $industries = Company::$industries;
+
         return view('company.edit', compact('company', 'industries'));
     }
 
@@ -90,7 +95,6 @@ class CompanyController extends Controller
     public function update(CompanyUpdateRequest $request, string $id)
     {
 
-
         $validate = $request->validated();
         $company = Company::findOrFail($id);
         $company->update([
@@ -99,21 +103,20 @@ class CompanyController extends Controller
             'industry' => $validate['industry'],
             'website' => $validate['website'] ?? null,
 
-            ]);
+        ]);
 
-            //update owner details
-           $ownerData = [];
-           $ownerData['name'] = $validate['owner_name'];
-           if (!empty($validate['owner_password'])) {
-               $ownerData['password'] = Hash::make($validate['owner_password']);
-           }
-           $company->owner->update($ownerData);
-           if($request->query('redirectToList')=='false'){
-            return redirect()->route('company.show', $company->id)->with('success','Company Updated Successfully');
-           }
+        // update owner details
+        $ownerData = [];
+        $ownerData['name'] = $validate['owner_name'];
+        if (! empty($validate['owner_password'])) {
+            $ownerData['password'] = Hash::make($validate['owner_password']);
+        }
+        $company->owner->update($ownerData);
+        if ($request->query('redirectToList') != 'true') {
+            return redirect()->route('company.show', $company->id)->with('success', 'Company Updated Successfully');
+        }
 
-        return redirect()->route('company.index')->with('success','Company Updated Successfully');
-
+        return redirect()->route('company.index')->with('success', 'Company Updated Successfully');
 
     }
 
@@ -124,12 +127,15 @@ class CompanyController extends Controller
     {
         $company = Company::findOrFail($id);
         $company->delete();
-        return redirect()->route('company.index')->with('success','Company Archived Successfully');
+
+        return redirect()->route('company.index')->with('success', 'Company Archived Successfully');
     }
+
     public function restore(string $id)
     {
         $company = Company::withTrashed()->findOrFail($id);
         $company->restore();
-        return redirect()->route('company.index',['archive'=>'true'])->with('success','Company Restored Successfully');
+
+        return redirect()->route('company.index', ['archive' => 'true'])->with('success', 'Company Restored Successfully');
     }
 }

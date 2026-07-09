@@ -12,36 +12,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(columns: ['status','aiGeneratedScore','aiGeneratedFeedback','userId','resumeId','jobVacancyId'])]
 
 class JobApplication extends Model
 {
-      use HasFactory, Notifiable, HasUuids, SoftDeletes;
+    use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
-      protected $table = 'job_applications';
+    protected $table = 'job_applications';
 
-  protected $keyType = "string";
+    protected $keyType = "string";
 
     public $incrementing = false;
 
+    protected $fillable = ['status', 'aiGeneratedScore', 'aiGeneratedFeedback', 'userId', 'resumeId', 'jobVacancyId'];
+
+
     protected $dates = [
-         'deleted_at',
+        'deleted_at',
     ];
 
     protected function casts(): array
     {
         return [
 
-            'deleted_at'=> 'datetime',
+            'deleted_at' => 'datetime',
         ];
     }
-    public function jobVacancy(){
-        return $this->belongsTo(JobVacancy::class,'jobVacancyId','id');
+    public function jobVacancy()
+    {
+        return $this->belongsTo(JobVacancy::class, 'jobVacancyId', 'id');
     }
-    public function resume(){
-        return $this->belongsTo(Resume::class,'resumeId','id');
-}
-public function user(){
-    return $this->belongsTo(User::class,'userId','id');
-}
+    public function resume()
+    {
+        return $this->belongsTo(Resume::class, 'resumeId', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userId', 'id');
+    }
 }
