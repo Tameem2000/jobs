@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\JobApplication;
 
 class JobApplicationController extends Controller
 {
     public function index()
     {
-        return view('job-applications.index');
+        $jobs = JobApplication::where('userId', auth()->id())->latest()->paginate(10);
+
+        return view('job-applications.index', compact('jobs'));
+    }
+
+    public function show($id)
+    {
+        $jobApplication = JobApplication::findOrFail($id);
+
+        return view('job-applications.show', compact('jobApplication'));
     }
 }
