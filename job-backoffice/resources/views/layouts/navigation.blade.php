@@ -25,12 +25,12 @@
         </x-nav-link>
         @endif
 
-        <x-nav-link :href="route('job-application.index')" :active="request()->routeIs('application.*')">
+        <x-nav-link :href="route('job-application.index')" :active="request()->routeIs('job-application.*')">
             {{ __('Applications') }}
         </x-nav-link>
         @if (auth()->user()->role === 'admin')
 
-            <x-nav-link :href="route('job-category.index')" :active="request()->routeIs('category.*')">
+            <x-nav-link :href="route('job-category.index')" :active="request()->routeIs('job-category.*')">
                 {{ __('Categories') }}
             </x-nav-link>
         @endif
